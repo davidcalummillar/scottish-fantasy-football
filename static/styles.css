@@ -1,0 +1,1106 @@
+/* === CSS Variables === */
+:root {
+    --pitch-green: #4a9e3f;
+    --pitch-green-light: #55ab4a;
+    --pitch-line: rgba(255, 255, 255, 0.85);
+    --card-bg: #ffffff;
+    --card-border: #ddd;
+    --text-primary: #1a1a1a;
+    --text-secondary: #666;
+    --accent: #2d7fd3;
+    --error: #d32f2f;
+    --success: #2e7d32;
+}
+
+/* === Reset & Base === */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #ffffff;
+    color: var(--text-primary);
+    overflow-x: hidden;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+}
+
+#app {
+    width: 100%;
+    max-width: 500px;
+    min-height: 100vh;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* === Loading State === */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    z-index: 1000;
+    color: #1a1a1a;
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #e0e0e0;
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* === Game Container === */
+.game-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* === Team Sections === */
+.team-section {
+    padding: 10px 15px;
+    background: #f5f5f5;
+}
+
+/* Team Ell (Light Red themed) */
+.team-ell {
+    background: #fce4e4;
+    border-bottom: 2px solid #e57373;
+}
+
+.team-ell .manager-card {
+    background: #ffffff;
+    border: 1px solid #e57373;
+}
+
+.team-ell .bench-slot {
+    border-color: #e57373;
+    background: rgba(229, 115, 115, 0.1);
+}
+
+.team-ell .bench-slot.filled {
+    background: #ffffff;
+    border-color: #e57373;
+}
+
+/* Team David (Light Blue themed) */
+.team-david {
+    background: #e3f2fd;
+    border-top: 2px solid #64b5f6;
+}
+
+.team-david .manager-card {
+    background: #ffffff;
+    border: 1px solid #64b5f6;
+}
+
+.team-david .bench-slot {
+    border-color: #64b5f6;
+    background: rgba(100, 181, 246, 0.1);
+}
+
+.team-david .bench-slot.filled {
+    background: #ffffff;
+    border-color: #64b5f6;
+}
+
+.team-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.team-bottom .team-header {
+    margin-bottom: 0;
+    margin-top: 10px;
+}
+
+/* === Manager Card === */
+.manager-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    background: var(--card-bg);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.manager-card:active {
+    transform: scale(0.98);
+}
+
+.manager-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: #ddd;
+}
+
+.manager-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.manager-name {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.manager-formation {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+/* === Team Stats === */
+.team-stats {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.budget-display {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.budget-label {
+    font-size: 10px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.budget-value {
+    font-size: 16px;
+    font-weight: 700;
+    color: #2e7d32;
+}
+
+.budget-value.negative {
+    color: var(--error);
+}
+
+/* === Chip Buttons === */
+.chip-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.chip-btn {
+    width: 40px;
+    height: 40px;
+    border: 2px solid #aaa;
+    background: #ffffff;
+    color: #666;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: -0.5px;
+}
+
+.chip-btn:active {
+    transform: scale(0.95);
+}
+
+/* BB active: brown */
+.chip-btn.chip-bb.active {
+    background: linear-gradient(135deg, #a0522d, #8b4513);
+    color: #ffffff;
+    border-color: #8b4513;
+    box-shadow: 0 2px 6px rgba(139, 69, 19, 0.4);
+}
+
+/* TC active: pink */
+.chip-btn.chip-tc.active {
+    background: linear-gradient(135deg, #e91e8c, #c2185b);
+    color: #ffffff;
+    border-color: #c2185b;
+    box-shadow: 0 2px 6px rgba(194, 24, 91, 0.4);
+}
+
+/* Transfer (1, 2) active: yellow */
+.chip-btn.chip-transfer.active {
+    background: linear-gradient(135deg, #fdd835, #f9a825);
+    color: #333;
+    border-color: #f9a825;
+    box-shadow: 0 2px 6px rgba(249, 168, 37, 0.4);
+}
+
+.chip-btn.used {
+    background: #e0e0e0;
+    color: #aaa;
+    border-color: #ccc;
+    cursor: default;
+    opacity: 0.6;
+}
+
+/* === Clear Scores Button === */
+.clear-scores-btn {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--card-border);
+    background: #ffffff;
+    color: var(--text-secondary);
+    border-radius: 10px;
+    font-size: 9px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s;
+    letter-spacing: -0.3px;
+}
+
+.clear-scores-btn:active {
+    background: #f0f0f0;
+}
+
+.clear-scores-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* === Bench Area === */
+.bench-area {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    padding: 8px 0;
+}
+
+.bench-slot {
+    width: 70px;
+    height: 85px;
+    background: rgba(0, 0, 0, 0.03);
+    border: 2px dashed rgba(0, 0, 0, 0.15);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+}
+
+.bench-slot:active {
+    background: rgba(0, 0, 0, 0.06);
+}
+
+.bench-slot.filled {
+    border-style: solid;
+    background: #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* === Football Pitch === */
+.pitch {
+    flex: 1;
+    background: var(--pitch-green);
+    background-image:
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 30px,
+            rgba(255, 255, 255, 0.06) 30px,
+            rgba(255, 255, 255, 0.06) 60px
+        );
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 5px 10px;
+    overflow: hidden;
+}
+
+/* === Pitch Markings === */
+/* Outer boundary */
+.pitch::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    border: 2px solid var(--pitch-line);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Centre circle */
+.pitch::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 90px;
+    height: 90px;
+    border: 2px solid var(--pitch-line);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Halfway line */
+.pitch-halfway {
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    top: 50%;
+    height: 2px;
+    background: var(--pitch-line);
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Centre spot */
+.pitch-centre-spot {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 6px;
+    height: 6px;
+    background: var(--pitch-line);
+    border-radius: 50%;
+    z-index: 2;
+    pointer-events: none;
+}
+
+/* Top penalty box */
+.pitch-box-top {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 180px;
+    height: 60px;
+    border: 2px solid var(--pitch-line);
+    border-top: none;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Top goal box (6-yard box) */
+.pitch-goal-top {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 25px;
+    border: 2px solid var(--pitch-line);
+    border-top: none;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Bottom penalty box */
+.pitch-box-bottom {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 180px;
+    height: 60px;
+    border: 2px solid var(--pitch-line);
+    border-bottom: none;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Bottom goal box (6-yard box) */
+.pitch-goal-bottom {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 25px;
+    border: 2px solid var(--pitch-line);
+    border-bottom: none;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Corner arcs */
+.pitch-corner-tl, .pitch-corner-tr, .pitch-corner-bl, .pitch-corner-br {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--pitch-line);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.pitch-corner-tl {
+    top: 10px;
+    left: 10px;
+    border-top: none;
+    border-left: none;
+    border-radius: 0 0 100% 0;
+}
+
+.pitch-corner-tr {
+    top: 10px;
+    right: 10px;
+    border-top: none;
+    border-right: none;
+    border-radius: 0 0 0 100%;
+}
+
+.pitch-corner-bl {
+    bottom: 10px;
+    left: 10px;
+    border-bottom: none;
+    border-left: none;
+    border-radius: 0 100% 0 0;
+}
+
+.pitch-corner-br {
+    bottom: 10px;
+    right: 10px;
+    border-bottom: none;
+    border-right: none;
+    border-radius: 100% 0 0 0;
+}
+
+.pitch-half {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 5px 0;
+    position: relative;
+    z-index: 5;
+}
+
+.pitch-top {
+    flex-direction: column;
+}
+
+.pitch-bottom {
+    flex-direction: column;
+}
+
+/* === Pitch Rows === */
+.pitch-row {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    padding: 3px 0;
+    position: relative;
+    z-index: 5;
+}
+
+/* === Scoreboard === */
+.scoreboard {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    padding: 8px 20px;
+    background: rgba(0, 0, 0, 0.75);
+    border-radius: 25px;
+    margin: 5px auto;
+    z-index: 10;
+    position: relative;
+    color: #ffffff;
+}
+
+.score-team {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.score-name {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.score-value {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.score-value.invalid {
+    color: var(--error);
+    font-size: 14px;
+}
+
+.score-divider {
+    font-size: 20px;
+    color: var(--text-secondary);
+}
+
+/* === Player Slots === */
+.player-slot {
+    width: 58px;
+    height: 70px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.15s;
+}
+
+.player-slot:active {
+    transform: scale(0.95);
+}
+
+/* DNP (Did Not Play) */
+.player-slot.dnp .shirt {
+    opacity: 0.35;
+    filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.4)) grayscale(0.8);
+}
+
+.player-slot.dnp .player-name {
+    opacity: 0.4;
+}
+
+.bench-slot.dnp .shirt {
+    opacity: 0.35;
+    filter: grayscale(0.8);
+}
+
+/* Empty Slot */
+.player-slot.empty .shirt {
+    opacity: 0.4;
+}
+
+.player-slot.empty .player-name {
+    font-size: 9.5px;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+}
+
+/* Bench player text needs dark color on light background */
+.bench-slot .player-name {
+    color: #333333;
+    font-size: 9.5px;
+    text-shadow: none;
+}
+
+/* === Shirt Container === */
+.shirt {
+    width: 48px;
+    height: 46px;
+    position: relative;
+    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.3));
+}
+
+.shirt svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* Captain/Vice-Captain Badge */
+.badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 18px;
+    height: 18px;
+    background: linear-gradient(135deg, #ffd700, #ffaa00);
+    color: #000;
+    border-radius: 50%;
+    font-size: 10px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    border: 1.5px solid rgba(255, 255, 255, 0.3);
+}
+
+.badge.vice {
+    background: linear-gradient(135deg, #c0c0c0, #888888);
+}
+
+/* Score on shirt */
+.shirt-score {
+    position: absolute;
+    bottom: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.85);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.shirt-score.dnp {
+    background: var(--error);
+}
+
+/* Player Name */
+.player-name {
+    font-size: 9px;
+    font-weight: 600;
+    text-align: center;
+    margin-top: 2px;
+    max-width: 62px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #ffffff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+/* === Modal === */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.modal-content {
+    position: relative;
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 20px;
+    width: 90%;
+    max-width: 350px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* === Modal Forms === */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-title {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.modal-close {
+    width: 30px;
+    height: 30px;
+    border: none;
+    background: transparent;
+    color: #999;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-label {
+    display: block;
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-select, .form-input {
+    width: 100%;
+    padding: 12px;
+    background: #f5f5f5;
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    color: var(--text-primary);
+    font-size: 16px;
+    font-family: inherit;
+}
+
+.form-select:focus, .form-input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.form-value {
+    padding: 12px;
+    background: #f5f5f5;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+/* === Buttons === */
+.btn {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #4a9eff, #2d7fd3);
+    color: white;
+}
+
+.btn-secondary {
+    background: #f0f0f0;
+    color: var(--text-primary);
+    border: 1px solid var(--card-border);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
+    color: white;
+}
+
+.btn-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn-group .btn {
+    flex: 1;
+}
+
+/* === Toggle Buttons === */
+.toggle-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.toggle-btn {
+    flex: 1;
+    padding: 10px;
+    background: #f5f5f5;
+    border: 2px solid var(--card-border);
+    border-radius: 10px;
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+}
+
+.toggle-btn.active {
+    border-color: var(--accent);
+    background: rgba(45, 127, 211, 0.1);
+}
+
+/* === Scoring Elements === */
+.scoring-elements {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 8px;
+    background: #f5f5f5;
+    border-radius: 12px;
+    transition: opacity 0.2s;
+}
+
+.scoring-elements.disabled {
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+.scoring-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+}
+
+.scoring-icon {
+    font-size: 16px;
+    width: 24px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.scoring-label {
+    font-size: 13px;
+    font-weight: 500;
+    flex: 1;
+    color: var(--text-primary);
+}
+
+.scoring-points {
+    font-size: 11px;
+    color: var(--text-secondary);
+    width: 28px;
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.scoring-controls {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.scoring-btn {
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--card-border);
+    background: #ffffff;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-primary);
+    transition: background 0.1s;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.scoring-btn:active {
+    background: #e8e8e8;
+    transform: scale(0.95);
+}
+
+.scoring-minus {
+    color: var(--error);
+}
+
+.scoring-plus {
+    color: var(--success);
+}
+
+.scoring-count {
+    width: 24px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+/* Score Total Row */
+.score-total-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+    padding: 10px 12px;
+    background: #f0f0f0;
+    border-radius: 10px;
+}
+
+.score-total-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.score-total-value {
+    flex: 1;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-align: center;
+}
+
+.score-reset-btn {
+    padding: 6px 10px;
+    background: none;
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.1s;
+}
+
+.score-reset-btn:active {
+    background: #e8e8e8;
+}
+
+.dnp-btn {
+    padding: 8px 14px;
+    background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.dnp-btn.active {
+    background: linear-gradient(135deg, #cc3333, #bb2222);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* === Player Info Display === */
+.player-display {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    background: #f5f5f5;
+    border-radius: 12px;
+    margin-bottom: 15px;
+}
+
+.player-display .shirt {
+    width: 60px;
+    height: 65px;
+}
+
+.player-display-info {
+    flex: 1;
+}
+
+.player-display-name {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.player-display-details {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+/* === Responsive Adjustments === */
+@media (max-width: 360px) {
+    .player-slot {
+        width: 50px;
+        height: 62px;
+    }
+
+    .shirt {
+        width: 40px;
+        height: 38px;
+    }
+
+    .player-name {
+        font-size: 8px;
+        max-width: 50px;
+    }
+
+    .bench-slot {
+        width: 60px;
+        height: 75px;
+    }
+}
+
+@media (min-width: 500px) {
+    .player-slot {
+        width: 65px;
+        height: 78px;
+    }
+
+    .shirt {
+        width: 52px;
+        height: 50px;
+    }
+
+    .player-name {
+        font-size: 10px;
+    }
+}
+
+/* === Error Message === */
+.error-message {
+    background: #ffebee;
+    border: 1px solid var(--error);
+    color: var(--error);
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 13px;
+    margin-bottom: 15px;
+}
+
+/* === Toast Notification === */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: #ffffff;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-size: 14px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 200;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
