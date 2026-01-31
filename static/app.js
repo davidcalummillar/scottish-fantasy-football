@@ -154,10 +154,11 @@ async function fetchData(action, params) {
 }
 
 async function postData(action, data) {
-    const url = new URL(API_BASE);
-    url.searchParams.set('action', action);
-    url.searchParams.set('payload', JSON.stringify(data));
-    const response = await fetch(url.toString());
+    const response = await fetch(API_BASE, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({ action, payload: data })
+    });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     return response.json();
 }
