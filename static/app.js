@@ -66,14 +66,15 @@ const SCORING_OUTFIELD = [
 ];
 
 const SCORING_GK = [
-    { key: 'goal',       label: 'Goal',          icon: '⚽',  points: 10 },
-    { key: 'assist',     label: 'Assist',         icon: '👟',  points: 3 },
-    { key: 'cleanSheet', label: 'Clean Sheet',    icon: '📄',  points: 4 },
-    { key: 'save',       label: 'Save',           icon: '🧤',  points: 1 },
-    { key: 'penSave',    label: 'Pen Save',       icon: '🥅',  points: 3 },
-    { key: 'penMiss',    label: 'Pen Miss',       icon: '❌',  points: -3 },
-    { key: 'yellow',     label: 'Yellow Card',    icon: '🟨', points: -1 },
-    { key: 'red',        label: 'Red Card',       icon: '🟥', points: -3 },
+    { key: 'goal',       label: 'Goal',            icon: '⚽',  points: 10 },
+    { key: 'assist',     label: 'Assist',           icon: '👟',  points: 3 },
+    { key: 'cleanSheet', label: 'Clean Sheet',      icon: '📄',  points: 4 },
+    { key: 'save',       label: 'Save',             icon: '🧤',  points: 1 },
+    { key: 'goalConc',   label: 'Goal Conceded',    icon: '😞',  points: -1 },
+    { key: 'penSave',    label: 'Pen Save',         icon: '🥅',  points: 3 },
+    { key: 'penMiss',    label: 'Pen Miss',         icon: '❌',  points: -3 },
+    { key: 'yellow',     label: 'Yellow Card',      icon: '🟨', points: -1 },
+    { key: 'red',        label: 'Red Card',         icon: '🟥', points: -3 },
 ];
 
 function getScoringElements(position) {
@@ -299,13 +300,24 @@ function getDisplayScore(squadPlayer, squad, playerName) {
     const viceCaptain = squad.find(p => p.ViceCaptain === 'TRUE');
 
     const captainPlayed = captain && captain.Score !== 'X' && captain.Score !== '';
-    const effectiveCaptain = captainPlayed ? captain : viceCaptain;
-
     const tcActive = getChipState(playerName, 'TC') === 'active';
-    const multiplier = tcActive ? 3 : 2;
 
-    if (effectiveCaptain && squadPlayer.Name === effectiveCaptain.Name) {
-        return rawScore * multiplier;
+    // Captain (or VC promoted to captain) gets 2x (or 3x with TC)
+    const captainMultiplier = tcActive ? 3 : 2;
+
+    if (captainPlayed) {
+        // Captain played: captain gets 2x/3x, VC gets 1.5x
+        if (captain && squadPlayer.Name === captain.Name) {
+            return rawScore * captainMultiplier;
+        }
+        if (viceCaptain && squadPlayer.Name === viceCaptain.Name) {
+            return rawScore * 1.5;
+        }
+    } else {
+        // Captain didn't play: VC becomes effective captain at 2x/3x
+        if (viceCaptain && squadPlayer.Name === viceCaptain.Name) {
+            return rawScore * captainMultiplier;
+        }
     }
     return rawScore;
 }
@@ -416,11 +428,11 @@ function renderTeam(playerName) {
             if (sp.Score === 'X') slotEl.classList.add('dnp');
             const displayScore = getDisplayScore(sp, squad, playerName);
             slotEl.innerHTML = `
-                <div class="shirt" style="width:45px;height:42px;">
+                <div class="shirt">
                     ${createShirtSVG(sp.PrimaryHex || '#333', sp.SecondaryHex || '#666')}
                     ${displayScore !== null ? `<span class="shirt-score ${sp.Score === 'X' ? 'dnp' : ''}">${displayScore}</span>` : ''}
                 </div>
-                <span class="player-name" style="font-size:8px;">${formatPlayerName(sp.Name)}</span>
+                <span class="player-name">${formatPlayerName(sp.Name)}</span>
             `;
         } else {
             slotEl.innerHTML = `<span class="player-name">BENCH</span>`;
@@ -448,7 +460,6 @@ function calculateTeamScore(squad, playerName) {
     const captain = squad.find(p => p.Captain === 'TRUE');
     const viceCaptain = squad.find(p => p.ViceCaptain === 'TRUE');
     const captainPlayed = captain && captain.Score !== 'X' && captain.Score !== '';
-    const effectiveCaptain = captainPlayed ? captain : viceCaptain;
     // Captain multiplier: TC active = x3, otherwise x2
     const captainMultiplier = tcActive ? 3 : 2;
     const usedSubs = new Set();
@@ -484,8 +495,20 @@ function calculateTeamScore(squad, playerName) {
             score = parseFloat(player.Score) || 0;
         }
 
-        if (effectiveCaptain && player.Name === effectiveCaptain.Name && player.Score !== 'X') {
-            score *= captainMultiplier;
+        if (player.Score !== 'X') {
+            if (captainPlayed) {
+                // Captain played: captain gets 2x/3x, VC gets 1.5x
+                if (captain && player.Name === captain.Name) {
+                    score *= captainMultiplier;
+                } else if (viceCaptain && player.Name === viceCaptain.Name) {
+                    score *= 1.5;
+                }
+            } else {
+                // Captain didn't play: VC becomes effective captain at 2x/3x
+                if (viceCaptain && player.Name === viceCaptain.Name) {
+                    score *= captainMultiplier;
+                }
+            }
         }
         total += score;
     }

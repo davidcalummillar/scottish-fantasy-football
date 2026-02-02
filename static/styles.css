@@ -305,8 +305,8 @@ body {
 }
 
 .bench-slot {
-    width: 80px;
-    height: 92px;
+    width: 82px;
+    height: 95px;
     background: rgba(0, 0, 0, 0.03);
     border: 2px dashed rgba(0, 0, 0, 0.15);
     border-radius: 12px;
@@ -614,7 +614,6 @@ body {
 /* Bench player text needs dark color on light background */
 .bench-slot .player-name {
     color: #333333;
-    font-size: 11px;
     text-shadow: none;
 }
 
@@ -1046,8 +1045,8 @@ body {
     }
 
     .bench-slot {
-        width: 70px;
-        height: 85px;
+        width: 68px;
+        height: 80px;
     }
 }
 
