@@ -299,14 +299,16 @@ function getFormationForPlayer(playerName) {
 
 // Get display score for a player (captain gets multiplier shown)
 function getDisplayScore(squadPlayer, squad, playerName) {
-    if (!squadPlayer || squadPlayer.Score === undefined || squadPlayer.Score === '') return null;
-    if (squadPlayer.Score === 'X') return 'X';
+    const playerScore = String(squadPlayer?.Score ?? '');
+    if (!squadPlayer || playerScore === '') return null;
+    if (playerScore === 'X') return 'X';
 
-    const rawScore = parseFloat(squadPlayer.Score) || 0;
+    const rawScore = parseFloat(playerScore) || 0;
     const captain = squad.find(p => p.Captain === 'TRUE');
     const viceCaptain = squad.find(p => p.ViceCaptain === 'TRUE');
 
-    const captainPlayed = captain && captain.Score !== 'X';
+    const captainScore = captain ? String(captain.Score ?? '') : '';
+    const captainPlayed = captain && captainScore !== 'X';
     const tcActive = getChipState(playerName, 'TC') === 'active';
 
     // Captain (or VC promoted to captain) gets 2x (or 3x with TC)
@@ -466,7 +468,8 @@ function calculateTeamScore(squad, playerName) {
     let total = 0;
     const captain = squad.find(p => p.Captain === 'TRUE');
     const viceCaptain = squad.find(p => p.ViceCaptain === 'TRUE');
-    const captainPlayed = captain && captain.Score !== 'X';
+    const captainScore = captain ? String(captain.Score ?? '') : '';
+    const captainPlayed = captain && captainScore !== 'X';
     // Captain multiplier: TC active = x3, otherwise x2
     const captainMultiplier = tcActive ? 3 : 2;
     const usedSubs = new Set();
@@ -474,13 +477,16 @@ function calculateTeamScore(squad, playerName) {
     for (const player of starters) {
         let score = 0;
 
-        if (player.Score === 'X') {
+        const playerScore = String(player.Score ?? '');
+        if (playerScore === 'X') {
             // DNP substitution logic (only when Bench Boost is NOT active)
             if (!bbActive) {
                 const playerPos = player.Position;
                 const availableBench = bench
-                    .filter(bp => !usedSubs.has(bp.Name) &&
-                           bp.Score !== 'X' && bp.Score !== '' && bp.Score !== undefined);
+                    .filter(bp => {
+                        const bpScore = String(bp.Score ?? '');
+                        return !usedSubs.has(bp.Name) && bpScore !== 'X' && bpScore !== '';
+                    });
 
                 const samePos = availableBench
                     .filter(bp => bp.Position === playerPos)
@@ -498,11 +504,11 @@ function calculateTeamScore(squad, playerName) {
                     }
                 }
             }
-        } else if (player.Score !== '' && player.Score !== undefined) {
-            score = parseFloat(player.Score) || 0;
+        } else if (playerScore !== '') {
+            score = parseFloat(playerScore) || 0;
         }
 
-        if (player.Score !== 'X') {
+        if (playerScore !== 'X') {
             if (captainPlayed) {
                 // Captain played: captain gets 2x/3x, VC gets 1.5x
                 if (captain && player.Name === captain.Name) {
